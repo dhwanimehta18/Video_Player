@@ -1,6 +1,9 @@
 package com.silverorange.videoplayer
 
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -14,7 +17,7 @@ import com.silverorange.videoplayer.databinding.RowVideoDetailBinding
 import com.silverorange.videoplayer.network.ifSuccess
 import com.silverorange.videoplayer.response.VideoPlayerBean
 import com.silverorange.videoplayer.utils.showError
-import java.util.*
+//import io.noties.markwon.html.HtmlPlugin
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,7 +67,20 @@ class MainActivity : AppCompatActivity() {
                 val bind = it.binding
                 val item = bind.item
 
-                bind.tvDetails.text = item?.description
+
+                //HtmlPlugin was not found, therefore converting the html text through ANdroid Html
+                /*val markwon = Markwon.builder(this@MainActivity)
+                    .usePlugin(HtmlPlugin.create())
+                    .build()*/
+
+                var description = ""
+                if (Build.VERSION.SDK_INT >= 24) {
+                    description = Html.fromHtml(item?.description, Html.FROM_HTML_MODE_LEGACY).toString() // for 24 api and more
+                } else {
+                    description = Html.fromHtml(item?.description).toString()// or for older api
+                }
+
+                bind.tvDetails.text = description
                 bind.tvTitle.text = item?.title
                 bind.tvAuthorName.text = item?.author?.name
 
