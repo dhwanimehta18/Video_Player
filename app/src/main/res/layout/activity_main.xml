@@ -13,6 +13,32 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/black"
+            app:layout_collapseMode="pin"
+            app:titleTextColor="@color/white">
+
+            <TextView
+                android:id="@+id/text_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/segoepr"
+                android:text="@string/video_player"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvVideoList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/row_video_detail"
+            android:scrollbars="horizontal" />
 
     </LinearLayout>
 </layout>
