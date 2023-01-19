@@ -74,10 +74,10 @@ class MainActivity : AppCompatActivity() {
                     .build()*/
 
                 var description = ""
-                if (Build.VERSION.SDK_INT >= 24) {
-                    description = Html.fromHtml(item?.description, Html.FROM_HTML_MODE_LEGACY).toString() // for 24 api and more
+                description = if (Build.VERSION.SDK_INT >= 24) {
+                    Html.fromHtml(item?.description, Html.FROM_HTML_MODE_LEGACY).toString() // for 24 api and more
                 } else {
-                    description = Html.fromHtml(item?.description).toString()// or for older api
+                    Html.fromHtml(item?.description).toString()// or for older api
                 }
 
                 bind.tvDetails.text = description
