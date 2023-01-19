@@ -1,13 +1,12 @@
 package com.silverorange.videoplayer
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.livinglifetechway.k4kotlin.core.androidx.isNetworkAvailable
+import com.google.android.exoplayer2.*
 import com.livinglifetechway.k4kotlin.core.isNetworkAvailable
-import com.livinglifetechway.k4kotlin.core.onClick
 import com.livinglifetechway.k4kotlin.core.orFalse
 import com.ravikoradiya.liveadapter.LiveAdapter
 import com.silverorange.videoplayer.databinding.ActivityMainBinding
@@ -15,6 +14,8 @@ import com.silverorange.videoplayer.databinding.RowVideoDetailBinding
 import com.silverorange.videoplayer.network.ifSuccess
 import com.silverorange.videoplayer.response.VideoPlayerBean
 import com.silverorange.videoplayer.utils.showError
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +41,13 @@ class MainActivity : AppCompatActivity() {
             it.ifSuccess {
                 if (it?.size!! > 0) {
                     val item = it
+
+                    item.sortedBy { videoPlayerBean -> videoPlayerBean.publishedAt }
+                    val size = item.size
+                    for (i in 0..item.size) {
+                        item[i].size = size
+                    }
+
                     mViewModel.setVideoList(item)
                     loadInitialUIData()
                 } else {
@@ -50,22 +58,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadInitialUIData() {
-        LiveAdapter(mViewModel.liveDataVideoList, BR.item)
-            .map<VideoPlayerBean, RowVideoDetailBinding>(R.layout.row_video_detail) {
-                onBind {
+        LiveAdapter(mViewModel.liveDataVideoList, BR.item).map<VideoPlayerBean, RowVideoDetailBinding>(R.layout.row_video_detail) {
+            onBind {
 
-                    val bind = it.binding
-                    val item = bind.item
+                val bind = it.binding
+                val item = bind.item
 
-                    bind.tvDetails.text = item.description
-                    bind.tvTitle.text = item.title
-                    bind.tvAuthorName.text = item.author?.name
+                bind.tvDetails.text = item?.description
+                bind.tvTitle.text = item?.title
+                bind.tvAuthorName.text = item?.author?.name
 
-                }
-                onClick {
+                val player = ExoPlayer.Builder(this@MainActivity).build()
 
-                }
+                // Bind the player to the view.
+                bind.exoPlayerVideoContainer.player = player
+
+                // Build the media item
+                val mediaItem: MediaItem = MediaItem.fromUri(item?.fullURL.toString())
+                // Set the media item to be played.
+                player.setMediaItem(mediaItem)
+                // Prepare the player.
+                player.prepare()
+                // Start the playback.
+                player.play()
+
+
             }
-            .into(mBinding.rvVideoList)
+            onClick {
+
+            }
+        }.into(mBinding.rvVideoList)
     }
+
 }
+

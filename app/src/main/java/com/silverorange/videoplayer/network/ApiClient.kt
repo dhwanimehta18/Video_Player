@@ -35,7 +35,7 @@ object ApiClient {
                 //pass authorization header in request
 
                 val response = it.proceed(newBuilder.build())
-                if (response.code == 401) {
+                if (response.code() == 401) {
                     //Handle 401 response
                     UnAuthorizedEventObserver.notifyObservers()
                 }
@@ -45,7 +45,7 @@ object ApiClient {
                 e.printStackTrace()
             }
             val response = it.proceed(request)
-            if (response.code == 401) {
+            if (response.code() == 401) {
                 UnAuthorizedEventObserver.notifyObservers()
             }
             response

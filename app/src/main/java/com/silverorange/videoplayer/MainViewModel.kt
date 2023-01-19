@@ -19,7 +19,6 @@ class MainViewModel : CoroutineScopedViewModel() {
     }
 
     fun setVideoList(item: List<VideoPlayerBean>) {
-        val videoData = item
         mutableVideoList.value = item
     }
 }

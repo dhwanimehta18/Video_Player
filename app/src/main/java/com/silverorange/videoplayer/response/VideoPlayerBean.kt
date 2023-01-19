@@ -10,7 +10,8 @@ data class VideoPlayerBean(
     @SerializedName("fullURL") var fullURL: String? = null,
     @SerializedName("description") var description: String? = null,
     @SerializedName("publishedAt") var publishedAt: String? = null,
-    @SerializedName("author") var author: Author? = Author()
+    @SerializedName("author") var author: Author? = Author(),
+    var size: Int = 0
 
 )
 
